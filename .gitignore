@@ -1,0 +1,15 @@
+.venv/
+__pycache__/
+.pytest_cache/
+config.toml
+evewatch.log*
+sounds_cache/
+universe.json
+types.json
+*.bak*
+*.tmp
+anchor.png
+metrics*.csv
+dist/
+build/
+*.spec

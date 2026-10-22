@@ -1,0 +1,106 @@
+# EVE Watch configuration. Copy to config.toml and edit.
+# Relative paths are resolved against the folder containing this file.
+
+[general]
+log_level = "INFO"             # DEBUG, INFO, WARNING, ERROR
+log_file = "evewatch.log"
+
+[sounds]
+max_queue_age_sec = 5          # queued sounds older than this are dropped
+directory = "sounds_cache"     # where generated auto:* sounds are cached
+blind_sound = "auto:blind"     # Local view lost
+fault_sound = "auto:fault"     # repeated internal errors
+
+[local]
+enabled = true
+region = [0, 0, 0, 0]          # filled in by `calibrate-region`: [x, y, width, height]; x and y may be negative
+fps = 2
+min_icon_height = 8            # a color stripe must be at least this tall to count as one icon
+min_row_pixels = 2             # matching pixels needed in a row for it to belong to a stripe
+merge_gap_rows = 1             # stripes split by this few empty rows count as one icon
+confirm_frames = 2
+cooldown_sec = 3
+repeat_while_present_sec = 0   # 0 = do not repeat
+alert_on_arrival = true
+blind_after_sec = 10
+blind_repeat_sec = 30
+blind_foreign_fraction = 0.6   # lost view when more of the region than this is neither background nor a class
+blind_on_empty = false         # lost view when icons were seen but the list became completely empty
+                               # (leave off unless your own icon always matches a class)
+background_color = []          # R,G,B of the empty Local background; set by `calibrate-colors`
+background_tolerance = 25
+
+# Colors below are rough defaults; run `calibrate-colors` to measure your own.
+# sound: "auto:<name>" (generated) or a path to a .wav file.
+# Higher priority interrupts and outranks lower priority.
+
+[local.classes.terrible]
+color = [200, 30, 30]
+tolerance = 40
+enabled = true
+sound = "auto:terrible"
+priority = 5
+
+[local.classes.bad]
+color = [230, 110, 30]
+tolerance = 40
+enabled = true
+sound = "auto:bad"
+priority = 4
+
+[local.classes.neutral]
+color = [150, 150, 150]
+tolerance = 30
+enabled = true
+sound = "auto:neutral"
+priority = 3
+
+[local.classes.good]
+color = [80, 160, 230]
+tolerance = 40
+enabled = false
+sound = "auto:good"
+priority = 2
+
+[local.classes.excellent]
+color = [30, 70, 190]
+tolerance = 40
+enabled = false
+sound = "auto:excellent"
+priority = 1
+
+# Custom classes are allowed, e.g.:
+# [local.classes.suspect]
+# color = [240, 220, 40]
+# sound = "auto:tone_1000_2"
+# priority = 4
+
+[intel]
+enabled = true
+chatlog_dir = "auto"           # "auto" = Documents\EVE\logs\Chatlogs
+channels = ["YourIntelChannel1", "YourIntelChannel2"]
+home_system = "auto"           # "auto" = from the Local chatlog, or a system name
+ignore_words = []             # messages containing any of these words are dropped entirely
+clear_words = ["clr", "clear"] # "system is clear" reports
+clear_mode = "signal"          # "signal": play clear_sound for them; "ignore": drop them
+clear_sound = "auto:clear"
+ignore_systems = []            # system names that must never be matched (names that are also common words)
+universe_file = "universe.json"   # built once by `python -m evewatch build-universe`
+max_message_age_sec = 300      # ignore chat lines older than this (0 = off); log times are UTC
+dedup_sec = 30
+ignore_own_messages = false
+own_characters = []
+extra_links = []               # [["System A", "System B"]] for Ansiblex / bridges
+aliases = {}                   # { "abbr" = "System Name" }
+
+[[intel.tiers]]
+max_jumps = 0
+sound = "auto:intel_0"
+
+[[intel.tiers]]
+max_jumps = 2
+sound = "auto:intel_2"
+
+[[intel.tiers]]
+max_jumps = 5
+sound = "auto:intel_5"

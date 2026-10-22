@@ -1,0 +1,100 @@
+EVE Watch - passive Local and intel-channel watcher for EVE Online
+===================================================================
+
+What it does
+------------
+EVE Watch looks at the column of standing icons in your Local window and reads the text chat logs that the
+EVE client writes by itself. It plays a sound when a pilot with a standing you care about shows up in Local,
+and when a system near you is named in an intel channel.
+
+It only observes and signals. It does not read game memory, press keys, click, hook the game, or touch the
+network while it is running (the only download is the one-off system graph, and only when you ask for it).
+
+Before you use it, check the current CCP EULA and their policy on third-party tools yourself. CCP does not
+publish a specific permission for screen capture, and you use this tool at your own responsibility.
+
+
+Requirements
+------------
+- Windows 10 or 11, 64-bit.
+- EVE client in windowed or borderless mode (exclusive fullscreen may not be capturable).
+- "Log chat to file" enabled in the client: Esc -> Settings -> Chat -> Log chat to file.
+- The Local window open, tall enough to show the whole member list, and not covered by other windows.
+
+
+Quick start
+-----------
+1. Put EveWatch.exe in its own folder (it will create config.toml, a log file and a sounds folder next to it)
+   and double-click it.
+   Windows may show a SmartScreen warning because the file is not signed: click "More info", then "Run anyway".
+
+2. A menu appears:
+
+       1  Run (watch Local and intel)
+       2  Settings (select the Local window, colors, channels, sounds)
+       3  Download / update the system graph (needed for intel; ~95 MB, once)
+       4  Test sounds
+       q  Quit
+
+3. Choose 3 and confirm. This downloads CCP's official static data once (about 95 MB) and builds a local
+   map of New Eden. Intel signals do not work without it. After this the program works fully offline.
+
+4. Choose 2 (Settings). A window opens:
+   - Intel tab: type the exact name of your intel channel(s) into "Intel channels", one per line.
+     The name must match the channel name in the chat log file name, for example "wc.Vale+Tr+Ge".
+   - Click "Select Local region on screen..." and drag a rectangle around the WHOLE Local window.
+     The column of standing icons, the top of the list and a small reference icon are found automatically.
+   - Click "Pick colors from screen...": choose a class in the list (terrible, bad, neutral, ...) and click
+     an icon of that standing in your Local list. Repeat for each class you want to be warned about.
+   Everything is saved automatically.
+
+5. Back in the menu choose 1 (Run). The status line shows the paused/running state, the current system and
+   the icon counts per class. Leave the window open while you play.
+
+
+Keys while it runs
+------------------
+    p  pause / resume          m  mute / unmute
+    s  print the full status   r  reload the config now
+    q  quit
+
+Changes made in Settings (or by editing config.toml) are picked up automatically while it runs.
+
+
+Sounds
+------
+Menu item 4 plays every signal in turn so you can learn them.
+
+- Local classes: buzzy pulses. The more dangerous the standing, the higher the pitch and the more pulses.
+  Defaults: red (terrible), orange (bad) and grey (neutral) are on; blue standings are off.
+- Intel: soft tones. The closer the system, the higher the pitch and the more pulses.
+- "clr" / "clear" reports: one quiet, low tone.
+- Alternating two-tone alarm: "view lost" - the Local window was closed, covered or moved, so the program
+  cannot see the list any more. Do not trust silence while this plays.
+- Higher priority sounds interrupt lower ones; waiting sounds are dropped if they become stale.
+
+
+Good to know
+------------
+- If you move or resize the Local window, select it again in Settings.
+- Only the rows visible in the Local window are seen. Make the window tall enough, or sort by standing.
+- If a normal word is often mistaken for a system (for example "Pain" or "Access"), add it to
+  "Never match systems" on the Intel tab.
+- Messages containing "nv" (no visual) are treated as normal reports. "clr" can be set to "ignore" if you
+  prefer silence for clear reports.
+- Chat lines older than 5 minutes are ignored, so a restart never replays old intel.
+- Log file: evewatch.log next to the program. Send it along if something does not work.
+
+
+Troubleshooting
+---------------
+- No reaction from Local: the status line shows the counts per class. If they stay at zero, the region is
+  wrong or the colors are not calibrated - repeat step 4. Make sure the Local window is visible and the
+  region is only the icon column (the program warns when it is wider than 80 px).
+- No intel signals: run menu item 3 once; check the channel name; check that "Log chat to file" is on and
+  that the file appears in Documents\EVE\logs\Chatlogs.
+- No sound at all: press m (mute may be on), then try menu item 4.
+- "View lost" plays all the time: open Settings and clear the "Background color" field; the reference icon
+  is enough for semi-transparent windows.
+- Antivirus flags the file: the program is a PyInstaller bundle and is not code-signed, which commonly
+  triggers false positives. Compare the SHA-256 hash with the one you were given, or build it from source.
